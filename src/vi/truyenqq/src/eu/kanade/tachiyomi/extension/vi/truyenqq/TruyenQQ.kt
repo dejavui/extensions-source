@@ -104,9 +104,9 @@ class TruyenQQ :
         title = document.select("h1").text()
         author = info.select(".org").joinToString { it.text() }
         genre = document.select(".list01 li").joinToString { it.text() }
-        description = document.select(".story-detail-info").first()
-            ?.children()
-            ?.joinToString("\n\n") { it.wholeText().trim() }
+        description = document.select(".story-detail-info")
+            .flatMap { it.children() }
+            .joinToString("\n\n") { it.wholeText().trim() }
         thumbnail_url = document.selectFirst("img[itemprop=image]")?.absUrl("src")
         status = parseStatus(info.select(".status > p:last-child").text())
     }
