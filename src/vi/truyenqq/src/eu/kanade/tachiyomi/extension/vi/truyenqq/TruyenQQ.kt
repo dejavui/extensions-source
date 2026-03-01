@@ -105,8 +105,11 @@ class TruyenQQ :
         author = info.select(".org").joinToString { it.text() }
         genre = document.select(".list01 li").joinToString { it.text() }
         description = document.select(".story-detail-info")
-            .flatMap { it.children() }
-            .joinToString("\n\n") { it.wholeText().trim() }
+            .joinToString("\n\n") { container ->
+                val blocks = container.select("p")
+                if (blocks.isNotEmpty()) blocks.joinToString("\n\n") { it.wholeText().trim() } else container.wholeText().trim()
+            }
+
         thumbnail_url = document.selectFirst("img[itemprop=image]")?.absUrl("src")
         status = parseStatus(info.select(".status > p:last-child").text())
     }
